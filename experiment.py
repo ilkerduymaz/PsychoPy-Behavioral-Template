@@ -36,21 +36,23 @@ class Experiment:
         self.tStarted = time.time()
         self.current_block = 1  # for counting blocks, do not change
     
+    def defineTrials(self, win):
+        self.trials = [
+            {"cond_trl": Trial(self, win), "nreps": self.trial_per_block}
+        ]
+    
     def initTrials(self, win):
         self.fixation = Fixation(self, win, duration=1)
         self.trial_break = TrialBreak(self, win)
         self.before_trials = [self.fixation]
         self.after_trials = [self.trial_break]
-        
-        self.trials = [
-            {"cond_trl": Trial(self, win), "nreps": self.trial_per_block}
-        ]
+        self.defineTrials(win)
         
         block = []
         for cond in self.trials:
             trial_group = [self.before_trials, [cond["cond_trl"]], self.after_trials]
             trial_group = list(chain(*trial_group))
-            cond_group = [copy.copy(y) for x in range(cond["nreps"]) for y in [trial_group]]
+            cond_group = [copy.copy(trial_group) for _ in range(cond["nreps"])]
             block.extend(cond_group)
             
         trial_sequence = []
@@ -58,8 +60,9 @@ class Experiment:
         intro = Intro(self, win)
         trial_sequence.append(intro)
         for ind in range(self.total_blocks):
-            shuffle(block)
-            trial_sequence.extend(list(chain(*block)))
+            thisBlock = copy.copy(block)
+            shuffle(thisBlock)
+            trial_sequence.extend(list(chain(*thisBlock)))
             if ind < self.total_blocks-1:
                 trial_sequence.append(blockbreak)
         
