@@ -4,8 +4,8 @@ import smtplib
 import base64
 
 def send_notification(subject="Experiment Notification", message="This email was sent automatically by code"):
-    send_to = ["duymaz@sabanciuniv.edu"]
-    send_from = "alvinlabdatasender@gmail.com"
+    send_to = ["receiver_address@mail.com"]
+    send_from = "sender_address@mail.com"
     
     f=open("pass.txt", "r")
     lines = f.readlines()

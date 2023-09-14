@@ -153,4 +153,5 @@ cython_debug/
 
 data/*
 *.mp4
-data\*
+videos/*
+pass.txt
