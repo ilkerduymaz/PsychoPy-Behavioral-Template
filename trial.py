@@ -15,33 +15,32 @@ class Trial:
         
         ### Stimulus ###
         self.stim = []
-        self.initStim(win)
         
     def initStim(self, win):
-        self.cross = visual.TextStim(
-            win, text='+', color='red', colorSpace='rgb', pos=(0, 0))
-        
-        self.text = visual.TextStim(
-            win, text=f'This is an example trial.', color='black', colorSpace='rgb', pos=(0, 2))
-        
-        self.stim.append(self.cross)
-        self.stim.append(self.text)
+        pass
 
-    def updateStim(self, frame=0):
+    def updateStim(self, exp, win, frame=0):
+        pass
+
+    def handleInputs(self, exp, win, frame=0, keys=[]):
         pass
     
     def writeData(self, trials):
-        trials.addData('TrialType', self.trl_type)
+        pass
+
+    def reset(self):
+        self.skip = False
     
     def draw(self, exp, win, frame=0, keys=[], trials=None, **kwargs):
-        self.updateStim(frame=frame)
+        self.updateStim(exp, win, frame=frame)
         
-        for stim in self.stim:
-            stim.draw()
+        if self.stim:
+            for stim in self.stim:
+                stim.draw()
     
     def drawTrial(self, exp, win, frame=0, keys=[], trials=None, **kwargs):
-        
         self.draw(exp, win, frame=frame, keys=keys, trials=trials)
+        self.handleInputs(exp, win, frame=frame, keys=keys)
         
         if frame == self.total_frames-1 or self.skip:
             self.writeData(trials)

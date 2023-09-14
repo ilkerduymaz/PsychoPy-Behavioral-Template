@@ -8,6 +8,7 @@ class Fixation(Trial):
         self.trl_type = "Fixation"
         self.trial_duration = duration # in seconds
         self.total_frames = self.trial_duration * exp.refresh_rate
+        self.initStim(win)
         
     def initStim(self, win):
         self.cross = visual.TextStim(

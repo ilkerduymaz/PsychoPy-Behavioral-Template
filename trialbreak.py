@@ -19,7 +19,7 @@ class TrialBreak(Trial):
         
         self.stim.append(self.breaktext)
         
-    def updateStim(self, exp, frame=0):
+    def updateStim(self, exp, win, frame=0):
         if frame < self.break_frames:
             # Calculate remaining time until the participant can skip
             rem_second = self.seconds - floor(frame/exp.refresh_rate)
@@ -31,12 +31,10 @@ class TrialBreak(Trial):
         trials.addData('TrialType', self.trl_type)
         trials.addData('BreakTaken', self.break_taken)
         self.break_taken = 0
-        
-    def draw(self, exp, win, frame=0, keys=[], **kwargs):
-        self.updateStim(exp, frame=frame)
-        for stim in self.stim:
-            stim.draw()
-            
+    
+    def handleInputs(self, exp, win, frame=0, keys=...):
         if frame >= self.break_frames and (len(keys) > 0 or exp.autopilot):
             self.skip = True
             self.break_taken = frame/exp.refresh_rate
+            
+        

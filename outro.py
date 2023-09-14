@@ -9,6 +9,8 @@ class Outro(Trial):
         # Arbitrary number of frames to make the for loop continue until keypress
         self.total_frames = 500000
         self.skip = False  # skip to the next trial?
+        
+        self.initStim(win)
 
     def initStim(self, win):
         self.stim = []
@@ -20,13 +22,12 @@ class Outro(Trial):
     def writeData(self, trials):
         trials.addData('TrialType', self.trl_type)
         trials.addData('ExpDur', self.expDur)
-    
-    def draw(self, exp, win, frame=0, keys=[], trials=None, **kwargs):
-        for stim in self.stim:
-            stim.draw()
-
-        tEnded = time.time()
-        self.expDur = tEnded - exp.tStarted
         
+    def handleInputs(self, exp, win, frame=0, keys=[]):
         if len(keys) > 0 or exp.autopilot:
             self.skip = True
+    
+    def updateStim(self, exp, win, frame=0):
+        if frame == 0:
+            tEnded = time.time()
+            self.expDur = tEnded - exp.tStarted

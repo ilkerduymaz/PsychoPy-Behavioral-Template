@@ -11,6 +11,8 @@ class Intro(Trial):
         # Arbitrary number of frames to make the for loop continue until keypress
         self.total_frames = 500000
         self.skip = False  # skip to the next trial?
+        
+        self.initStim(win)
     
     def initStim(self, win):
         self.stim = []
@@ -19,18 +21,14 @@ class Intro(Trial):
 
         self.stim.append(self.breaktext)
     
-    def updateStim(self, exp, frame=0):
+    def updateStim(self, exp, win, frame=0):
         if frame < self.break_frames:
             # Calculate remaining time until the participant can skip
             rem_second = self.seconds - floor(frame/exp.refresh_rate)
-            self.breaktext.text = f'Hi, this is an experiment template.\nYou can continue in {rem_second} seconds.'
+            self.breaktext.text = f'Hi, the experiment is about to start.\nYou can continue in {rem_second} seconds.'
         elif frame >= self.break_frames:  # Accept keypresses after the imposed duration
             self.breaktext.text = 'Press any key to continue.'
 
-    def draw(self, exp, win, frame=0, keys=[], trials=None, **kwargs):
-        self.updateStim(exp, frame=frame)
-        for stim in self.stim:
-            stim.draw()
-
+    def handleInputs(self, exp, win, frame=0, keys=[]):
         if frame >= self.break_frames and (len(keys) > 0 or exp.autopilot):
             self.skip = True

@@ -2,21 +2,22 @@
 # -*- coding: utf-8 -*-
 
 from psychopy import gui, visual, core, data, event, logging, monitors
-from numpy.random import choice as randchoice
-import os 
+import os, binascii, subprocess
 import psychopy.iohub as io
 from psychopy.hardware import keyboard
 from experiment import Experiment
+from send_notification import send_notification
+import sys
 
 
 def runExperiment():
     # Ensure that relative paths start from the same directory as this script
     _thisDir = os.path.dirname(os.path.abspath(__file__))
     os.chdir(_thisDir)
+    data_dir = os.path.join(_thisDir, 'data')
 
     # Store info about the experiment session
     psychopyVersion = '2022.1.3'
-    expName = 'PsychoPyEEGTemplate'
     
     # Initialize Experiment object
     exp = Experiment()
@@ -27,7 +28,7 @@ def runExperiment():
                    'The width of your screen in millimeters:': 310}
         
         dlgmon = gui.DlgFromDict(dictionary=monDW,
-                               sortKeys=False, title=expName)
+                               sortKeys=False, title=exp.expName)
         
         if dlgmon.OK == False:
             core.quit()
@@ -38,24 +39,24 @@ def runExperiment():
     # Remind the experimenter to measure participant's distance to the screen    
     dist = exp.monitor.currentCalib["distance"]
     confirmDist = {f'The participant sits {dist} mm away from the monitor?': ['Yes', 'No']}
-    dlgc = gui.DlgFromDict(dictionary=confirmDist, sortKeys=False, title=expName)
+    dlgc = gui.DlgFromDict(dictionary=confirmDist, sortKeys=False, title=exp.expName)
     if dlgc.OK == False:
         core.quit()  # user pressed cancel
     
     
     # Ask for demographic info    
-    expInfo = {'participant': '', 'gender': ['Male', 'Female', 'Non-Binary/Other'], 'age': [], 'session': '001'}
-    dlg = gui.DlgFromDict(dictionary=expInfo, sortKeys=False, title=expName)
+    expInfo = {'participant': binascii.b2a_hex(os.urandom(2)).decode("utf-8"), 'gender': ['Male', 'Female', 'Non-Binary/Other'], 'age': []}
+    dlg = gui.DlgFromDict(dictionary=expInfo, sortKeys=False, title=exp.expName)
     if dlg.OK == False:
         core.quit()  # user pressed cancel
     expInfo['date'] = data.getDateStr()  # add a simple timestamp
-    expInfo['expName'] = expName
+    expInfo['expName'] = exp.expName
     expInfo['psychopyVersion'] = psychopyVersion
     
     ##############################################################
     # Set up data folders and filenames
     data_dir = os.path.join(_thisDir, 'data')
-    fn = f"{expInfo['participant']}_{expName}_{expInfo['date']}" # file name suffix
+    fn = f"{expInfo['participant']}_{exp.expName}_{expInfo['date']}" # file name suffix
     filename = os.path.join(data_dir, fn)
     
     if not os.path.isdir(data_dir):
@@ -65,7 +66,7 @@ def runExperiment():
         os.mkdir(os.path.join(data_dir, 'log'))
 
     # Set up ExperimentHandler
-    thisExp = data.ExperimentHandler(name=expName, version='',
+    thisExp = data.ExperimentHandler(name=exp.expName, version='',
         extraInfo=expInfo, runtimeInfo=None,
         originPath=_thisDir,
         savePickle=True, saveWideText=True,
@@ -92,23 +93,12 @@ def runExperiment():
     
     # Measure the frame rate of the monitor and raise error if it does not match the prespecified refresh rate
     expInfo['frameRate'] = win.getActualFrameRate()
-    if expInfo['frameRate'] != None and round(expInfo['frameRate']) == exp.refresh_rate:
-        frameDur = 1.0 / round(expInfo['frameRate'])
-    else:
-        # frameDur = 1.0 / 60.0  # could not measure, so guess
-        raise Exception(
-            f"frame rate is {expInfo['frameRate']} but you want it to be {exp.refresh_rate}.")
     
     # Setup ioHub
     ioConfig = {}
 
     # Setup iohub keyboard
     ioConfig['Keyboard'] = dict(use_keymap='psychopy')
-
-    ioSession = '1'
-    if 'session' in expInfo:
-        ioSession = str(expInfo['session'])
-    
     ioServer = io.launchHubServer(window=win, **ioConfig)
 
     # create a default keyboard (e.g. to check for escape)
@@ -125,12 +115,12 @@ def runExperiment():
                                trialList=exp.trial_sequence,
                                seed=None, name='trials')
     thisExp.addLoop(trials)  # add the loop to the experiment
-
     ################### LOOP STARTS HERE ###########################
     for thisTrial in trials: 
         
         # ------Prepare to start Routine "trial"-------
         continueRoutine = True
+        win.mouseVisible = False
 
         for frame in range(thisTrial.total_frames):
             keys = event.getKeys()
@@ -157,7 +147,9 @@ def runExperiment():
             # refresh the screen
             if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
                 win.flip()
-            
+
+        trials.addData('BlockN', exp.current_block)
+        trials.addData('Lab', exp.lab)
         thisExp.nextEntry()
         if not continueRoutine:  # a component has requested a forced-end of Routine
             break
@@ -165,7 +157,12 @@ def runExperiment():
     # Flip one final time so any remaining win.callOnFlip() 
     # and win.timeOnFlip() tasks get executed before quitting
     win.flip()
-    
+
+    fn2 = os.path.join(_thisDir, "backup", 'lastfile.csv')
+    thisExp.saveAsWideText(fn2, delim='auto')
+
+    win.close()
+
     # Save movie if recorded any
     if movie_recorded:
         win.saveMovieFrames(f'{fn}.mp4', fps=60)
@@ -173,16 +170,39 @@ def runExperiment():
     # Save frame intervals
     win.saveFrameIntervals(fileName=os.path.join(
         data_dir, 'log', f'{fn}_frameIntervals.log'), clear=True)
-    print('Overall, %i frames were dropped.' % win.nDroppedFrames)
 
     # these shouldn't be strictly necessary (should auto-save)
+    if not trials.finished:
+        filename = os.path.join(data_dir, "incomplete", f'_incomplete_{fn}')
     thisExp.saveAsWideText(filename+'.csv', delim='auto')
+
     logging.flush()
+
+    # Send notification
+    os.chdir(_thisDir)
+    send_notification(subject=f"Experiment Over - {exp.expName}", message=f"Experiment is over.\nParticipant: {expInfo['participant']}\nCondition: {exp.exp_type}")
+    
+    # Push data to github
+    if exp.doPush:
+        try:
+            os.chdir(data_dir)
+            subprocess.run(['git', 'pull'])
+            subprocess.run(['git', 'add', '--all'])
+            subprocess.run(['git', 'commit', '-m', f'{expInfo["participant"]}'])
+            subprocess.run(
+                ['git', 'push', '-u', 'origin', 'main'], check=True)
+        except Exception as err:
+            subprocess.run("echo could not push files to repo", shell=True, check=True)
+            print("could not push files to repo")
+            print(err)
+
     # make sure everything is closed down
-        
     thisExp.abort()  # or data files will save again on exit
-    win.close()
     core.quit()
 
 if __name__ == "__main__":
-    runExperiment()
+    try:
+        runExperiment(sys.argv[1])
+    except:
+        print("No experiment type argument given. Running with default arguments")
+        runExperiment()
