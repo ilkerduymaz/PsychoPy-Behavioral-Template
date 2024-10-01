@@ -12,7 +12,7 @@ class RatingScreen(Trial):
         
         posy = len(question)/80 - 0.5
         
-        self.text = visual.TextStim(win, text=question, pos=(0.0, posy))
+        self.text = visual.TextStim(win, text=question, pos=(0.0, posy), color=exp.text_color)
         self.slider = visual.RatingScale(win, choices=choices)
         self.stim = [self.text, self.slider]
 
@@ -25,6 +25,6 @@ class RatingScreen(Trial):
             self.skip = True
             win.mouseVisible = False
     
-    def writeData(self, trials):
+    def writeData(self, exp, trials):
+        super().writeData(exp, trials)
         trials.addData(self.question, self.answer)
-        trials.addData('TrialType', self.trl_type)

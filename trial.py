@@ -1,4 +1,5 @@
 from psychopy import visual
+import time
 
 class Trial:
     def __init__(self, exp, win):
@@ -25,22 +26,33 @@ class Trial:
     def handleInputs(self, exp, win, frame=0, keys=[]):
         pass
     
-    def writeData(self, trials):
-        pass
+    def writeData(self, exp, trials):
+        trials.addData('TrialType', self.trl_type)
+        trials.addData('TrialEnd', exp.clock.getTime())
 
+    def broadcastVariables(self):   
+        broadcast = {}
+        return broadcast
+
+    def receiveVariables(self, broadcast=None):
+        pass
+    
     def reset(self):
         self.skip = False
     
     def draw(self, exp, win, frame=0, keys=[], trials=None, **kwargs):
         self.updateStim(exp, win, frame=frame)
-        
+
+        if frame == 0:
+            trials.addData('TrialStart', exp.clock.getTime())
+
         if self.stim:
             for stim in self.stim:
                 stim.draw()
     
     def drawTrial(self, exp, win, frame=0, keys=[], trials=None, **kwargs):
-        self.draw(exp, win, frame=frame, keys=keys, trials=trials)
+        self.draw(exp, win, frame=frame, keys=keys, trials=trials, **kwargs)
         self.handleInputs(exp, win, frame=frame, keys=keys)
         
         if frame == self.total_frames-1 or self.skip:
-            self.writeData(trials)
+            self.writeData(exp, trials)

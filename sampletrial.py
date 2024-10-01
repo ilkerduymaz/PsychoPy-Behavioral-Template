@@ -21,4 +21,4 @@ class SampleTrial(Trial):
         pass
     
     def writeData(self, trials):
-        trials.addData('TrialType', self.trl_type)
+        super().writeData(trials)

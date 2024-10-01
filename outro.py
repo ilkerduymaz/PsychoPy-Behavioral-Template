@@ -9,18 +9,19 @@ class Outro(Trial):
         # Arbitrary number of frames to make the for loop continue until keypress
         self.total_frames = 500000
         self.skip = False  # skip to the next trial?
+        self.text_color = exp.text_color
         
         self.initStim(win)
 
     def initStim(self, win):
         self.stim = []
         self.breaktext = visual.TextStim(
-            win, text=f'The experiment is over.\nThanks for your participation!', color=[-1, -1, -1], colorSpace='rgb', pos=(0, 0))
+            win, text=f'The experiment is over.\nThanks for your participation!', color=self.text_color, colorSpace='rgb', pos=(0, 0))
 
         self.stim.append(self.breaktext)
     
-    def writeData(self, trials):
-        trials.addData('TrialType', self.trl_type)
+    def writeData(self, exp, trials):
+        super().writeData(exp, trials)
         trials.addData('ExpDur', self.expDur)
         
     def handleInputs(self, exp, win, frame=0, keys=[]):

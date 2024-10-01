@@ -11,13 +11,14 @@ class Intro(Trial):
         # Arbitrary number of frames to make the for loop continue until keypress
         self.total_frames = 500000
         self.skip = False  # skip to the next trial?
+        self.text_color = exp.text_color
         
         self.initStim(win)
     
     def initStim(self, win):
         self.stim = []
         self.breaktext = visual.TextStim(
-            win, text=f'You can continue in X seconds.', color=[-1, -1, -1], colorSpace='rgb', pos=(0, 0))
+            win, text=f'You can continue in X seconds.', color=self.text_color, colorSpace='rgb', pos=(0, 0))
 
         self.stim.append(self.breaktext)
     

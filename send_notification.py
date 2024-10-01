@@ -1,22 +1,21 @@
-from email.message import EmailMessage
 import ssl
 import smtplib
 import base64
+from email.mime.text import MIMEText
 
 def send_notification(subject="Experiment Notification", message="This email was sent automatically by code"):
-    send_to = ["receiver_address@mail.com"]
-    send_from = "sender_address@mail.com"
     
     f=open("pass.txt", "r")
     lines = f.readlines()
+    send_to = base64.b64decode(lines[1]).decode("utf-8")
+    send_from = base64.b64decode(lines[2]).decode("utf-8")
     password = base64.b64decode(lines[0]).decode("utf-8")
     f.close()
 
-    em = EmailMessage()
+    em = MIMEText(message)
     em['From'] = send_from
     em['To'] = send_to
     em['Subject'] = subject
-    em.set_content(message)
     
     context = ssl.create_default_context()
     

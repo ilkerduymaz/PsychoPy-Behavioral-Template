@@ -11,13 +11,14 @@ class BlockBreak(Trial):
         self.total_frames = 500000 # Arbitrary number of frames to make the for loop continue until keypress
         self.skip = False  # skip to the next trial?
         self.break_taken = 0
+        self.text_color = exp.text_color
         
         self.initStim(win)
         
     def initStim(self, win):
         self.stim = []
         self.breaktext = visual.TextStim(
-            win, text=f'You can continue in X seconds.', color=[-1, -1, -1], colorSpace='rgb', pos=(0, 0))
+            win, text=f'You can continue in X seconds.', color=self.text_color, colorSpace='rgb', pos=(0, 0))
 
         self.stim.append(self.breaktext)
     
@@ -29,8 +30,8 @@ class BlockBreak(Trial):
         elif frame >= self.break_frames:  # Accept keypresses after the imposed duration
             self.breaktext.text = f'Block: {exp.current_block}/{exp.total_blocks}\nPress any key to continue.'
     
-    def writeData(self, trials):
-        trials.addData('TrialType', self.trl_type)
+    def writeData(self, exp, trials):
+        super().writeData(exp, trials)
         trials.addData('BreakTaken', self.break_taken)
         self.break_taken = 0        
     
@@ -39,6 +40,7 @@ class BlockBreak(Trial):
             self.skip = True
             self.break_taken = frame/exp.refresh_rate
             exp.current_block += 1
+            exp.last_resp_accuracy = None
 
 
                 
