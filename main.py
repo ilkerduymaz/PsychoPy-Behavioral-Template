@@ -22,7 +22,7 @@ def runExperiment():
         "gender": ["Male", "Female", "Non-Binary/Other"],
         "age": [],
     }
-    dlg = gui.DlgFromDict(dictionary=expInfo, sortKeys=False, title="Example Experiment")
+    dlg = gui.DlgFromDict(dictionary=expInfo, sortKeys=False, title="Experiment")
     if dlg.OK == False:
         core.quit()  # user pressed cancel
 
