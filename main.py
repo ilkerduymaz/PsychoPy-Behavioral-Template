@@ -1,6 +1,7 @@
 #!/usr/bin/env python3.8
 # -*- coding: utf-8 -*-
 
+import psychopy
 from psychopy import gui, visual, core, data, event, logging, monitors
 import os, binascii, subprocess
 import psychopy.iohub as io
@@ -15,9 +16,6 @@ def runExperiment():
     _thisDir = os.path.dirname(os.path.abspath(__file__))
     os.chdir(_thisDir)
 
-    # Store info about the experiment session
-    psychopyVersion = "2023.2.2"
-
     # Ask for demographic info
     expInfo = {
         "participant": binascii.b2a_hex(os.urandom(2)).decode("utf-8"),
@@ -30,7 +28,8 @@ def runExperiment():
 
     expInfo["date"] = data.getDateStr()  # add a simple timestamp
     # expInfo['expName'] = exp.expName
-    expInfo["psychopyVersion"] = psychopyVersion
+    expInfo["psychopyVersion"] = psychopy.__version__
+    expInfo["psychopyPath"] = psychopy.__file__
 
     # Initialize Experiment object
     exp = Experiment()
@@ -196,7 +195,6 @@ def runExperiment():
         thisExp.nextEntry()
         if not continueRoutine:  # a component has requested a forced-end of Routine
             break
-
 
     # Flip one final time so any remaining win.callOnFlip()
     # and win.timeOnFlip() tasks get executed before quitting
