@@ -1,6 +1,6 @@
 from psychopy import visual
 from math import floor
-from trial import Trial
+from .trial import Trial
 
 class BlockBreak(Trial):
     def __init__(self, exp, win):

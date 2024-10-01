@@ -1,14 +1,12 @@
-from imgcategorization import ImgCategorization
-
-from trialgroup import TrialGroup
-from sampletrial import SampleTrial
-from trialbreak import TrialBreak
-from blockbreak import BlockBreak
-from fixation import Fixation
-from intro import Intro
-from outro import Outro
-from responsescreen import ResponseScreen
-from ratingscreen import RatingScreen
+from .trialgroup import TrialGroup
+from .sampletrial import SampleTrial
+from .trialbreak import TrialBreak
+from .blockbreak import BlockBreak
+from .fixation import Fixation
+from .intro import Intro
+from .outro import Outro
+from .responsescreen import ResponseScreen
+from .ratingscreen import RatingScreen
 from psychopy import monitors, core
 from psychopy.tools.monitorunittools import deg2pix
 from random import shuffle

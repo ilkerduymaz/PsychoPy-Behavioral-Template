@@ -1,5 +1,5 @@
 from psychopy import visual
-from trial import Trial
+from .trial import Trial
 import time
 
 class Outro(Trial):

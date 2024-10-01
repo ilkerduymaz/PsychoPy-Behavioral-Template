@@ -1,4 +1,4 @@
-from trial import Trial
+from .trial import Trial
 import copy
 class TrialGroup(Trial):
     def __init__(self, trial_group=[]):

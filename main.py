@@ -5,8 +5,8 @@ from psychopy import gui, visual, core, data, event, logging, monitors
 import os, binascii, subprocess
 import psychopy.iohub as io
 from psychopy.hardware import keyboard
-from experiment import Experiment
-from send_notification import send_notification
+from src.experiment import Experiment
+from src.send_notification import send_notification
 import sys
 
 

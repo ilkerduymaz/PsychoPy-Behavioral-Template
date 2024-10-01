@@ -1,4 +1,4 @@
-from trial import Trial
+from .trial import Trial
 from psychopy import visual
 
 class RatingScreen(Trial):

@@ -1,6 +1,6 @@
 from math import floor
 from psychopy import visual
-from trial import Trial
+from .trial import Trial
 import time 
 class TrialBreak(Trial):
     def __init__(self, exp, win):
