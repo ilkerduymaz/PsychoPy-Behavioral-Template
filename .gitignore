@@ -155,3 +155,4 @@ data/*
 *.mp4
 videos/*
 pass.txt
+backup/*
