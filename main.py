@@ -1,12 +1,12 @@
 #!/usr/bin/env python3.8
 # -*- coding: utf-8 -*-
-
 import psychopy
 from psychopy import gui, visual, core, data, event, logging, monitors
 import os, binascii, subprocess
 import psychopy.iohub as io
 from psychopy.hardware import keyboard
 from src.experiment import Experiment
+from videoexp import VideoExp
 from src.send_notification import send_notification
 import sys
 
@@ -15,14 +15,13 @@ def runExperiment():
     # Ensure that relative paths start from the same directory as this script
     _thisDir = os.path.dirname(os.path.abspath(__file__))
     os.chdir(_thisDir)
-
     # Ask for demographic info
     expInfo = {
         "participant": binascii.b2a_hex(os.urandom(2)).decode("utf-8"),
         "gender": ["Male", "Female", "Non-Binary/Other"],
         "age": [],
     }
-    dlg = gui.DlgFromDict(dictionary=expInfo, sortKeys=False, title="Example Experiment")
+    dlg = gui.DlgFromDict(dictionary=expInfo, sortKeys=False, title="Experiment")
     if dlg.OK == False:
         core.quit()  # user pressed cancel
 
@@ -32,7 +31,7 @@ def runExperiment():
     expInfo["psychopyPath"] = psychopy.__file__
 
     # Initialize Experiment object
-    exp = Experiment()
+    exp = VideoExp()
 
     # If not run on the lab PC, ask for info required for visual angle calculation
     if exp.distributed_ver:
@@ -162,8 +161,11 @@ def runExperiment():
         # ------Prepare to start Routine "trial"-------
         continueRoutine = True
         win.mouseVisible = False
+        frame = 0
 
-        for frame in range(thisTrial.total_frames):
+        while True:
+            frame += 1
+            
             keys = event.getKeys()
             if len(keys) > 0:
                 if "escape" in keys:  # Press ESC 2 times to abort the expeirment
@@ -195,6 +197,7 @@ def runExperiment():
         thisExp.nextEntry()
         if not continueRoutine:  # a component has requested a forced-end of Routine
             break
+
 
     # Flip one final time so any remaining win.callOnFlip()
     # and win.timeOnFlip() tasks get executed before quitting

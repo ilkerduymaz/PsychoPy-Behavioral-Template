@@ -4,21 +4,16 @@ class TrialGroup(Trial):
     def __init__(self, trial_group=[]):
         self.trl_type = "TrialGroup"
         self.trial_group = [copy.copy(trl) for trl in trial_group]
+        self.total_frames_og = -1
         self.reset()
 
     def getAttributes(self):
         self.__dict__.update(self.trial_group[self.trial_index].__dict__)
-        self.total_frames = self.total_frames_og
-
+        
     def reset(self):
         super().reset()
-        self.trial_frames = []
-        self.total_frames_og = 0
-        for trl in self.trial_group:
-            self.total_frames_og += trl.total_frames
-            self.trial_frames.append(list(range(trl.total_frames)))
+        self.total_frames = self.total_frames_og
 
-        # self.total_frames_og = len(self.trial_frames)
         self.trial_index = 0
         self.finished_frames = 0
 
@@ -37,7 +32,7 @@ class TrialGroup(Trial):
         current_trial.drawTrial(
             exp,
             win,
-            frame=self.trial_frames[self.trial_index][nframe],
+            frame=nframe,
             keys=keys,
             trials=trials,
             **kwargs
@@ -45,8 +40,7 @@ class TrialGroup(Trial):
         self.getAttributes()
 
         if (
-            self.trial_frames[self.trial_index][nframe]
-            == (current_trial.total_frames - 1)
+            nframe == (current_trial.total_frames - 1)
             or current_trial.skip
         ):
             self.trial_index += 1

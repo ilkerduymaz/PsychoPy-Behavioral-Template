@@ -56,3 +56,4 @@ class Trial:
         
         if frame == self.total_frames-1 or self.skip:
             self.writeData(exp, trials)
+            self.skip = True
