@@ -161,7 +161,7 @@ def runExperiment():
         # ------Prepare to start Routine "trial"-------
         continueRoutine = True
         win.mouseVisible = False
-        frame = 0
+        frame = -1
 
         while True:
             frame += 1
