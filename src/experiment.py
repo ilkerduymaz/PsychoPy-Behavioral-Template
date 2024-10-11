@@ -59,13 +59,16 @@ class Experiment:
         self.trials = [
             {"cond_trl": ResponseScreen(self, win), "nreps": self.cond_per_block}
         ]
-
-    def initTrials(self, win):
+    
+    def addBeforeTrials(self, win):
         self.fixation = Fixation(self, win, duration=1)
-        self.trial_break = TrialBreak(self, win)
         self.before_trials = [self.fixation]
+    
+    def addAfterTrials(self, win):
+        self.trial_break = TrialBreak(self, win)
         self.after_trials = [self.trial_break]
-        self.defineTrials(win)
+
+    def addEndSurvey(self, win):
         self.endsurvey = [
             RatingScreen(
                 self,
@@ -80,16 +83,34 @@ class Experiment:
                 choices=map(str, range(1, 6)),
             ),
         ]
-
+    def defineBlock(self, win):
         block = []
         for cond in self.trials:
-            trial_group = [self.before_trials, [cond["cond_trl"]], self.after_trials]
+
+            trial_group = [self.before_trials, 
+                           [cond["cond_trl"]], 
+                           self.after_trials]
+            
             trial_group = list(chain(*trial_group))
+
             cond_group = [
                 TrialGroup(trial_group=copy.copy(trial_group))
                 for _ in range(cond["nreps"])
             ]
+
             block.extend(cond_group)
+        
+        return block
+
+    def initTrials(self, win):
+        self.addBeforeTrials(win)
+        self.addAfterTrials(win)
+        self.defineTrials(win)
+        self.addEndSurvey(win)
+
+        # Define blocks
+        block = self.defineBlock(win)
+
         trial_sequence = []
         blockbreak = BlockBreak(self, win)
         intro = Intro(self, win)

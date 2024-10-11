@@ -21,6 +21,11 @@ class ResponseScreen(Trial):
 
         self.initStim(win)
 
+    def setBindings(self, bindings):
+        self.bindings = bindings
+        text = [f"{key} - {value}" for key, value in self.bindings.items()]
+        self.text.text = "\n".join(text)
+
     def initStim(self, win):
         text = [f"{key} - {value}" for key, value in self.bindings.items()]
         text = "\n".join(text)
@@ -56,9 +61,9 @@ class ResponseScreen(Trial):
                     exp.total_correct += 1
                 else:
                     self.accuracy = 0
-                
+
                 exp.last_resp_accuracy = self.accuracy
-        
+
     def writeData(self, exp, trials):
         # super().writeData(exp, trials)
         trials.addData("Answer", self.answer)
