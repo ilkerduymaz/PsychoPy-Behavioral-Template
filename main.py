@@ -124,6 +124,9 @@ def runExperiment():
     # create a default keyboard (e.g. to check for escape)
     defaultKeyboard = keyboard.Keyboard(backend="iohub")
 
+    # Set priority
+    io.devices.Computer.setPriority("high", disable_gc=True)
+
     # Initialize components for Routine "trial"
     movie_recorded = False
     endExpNow = False  # flag for 'escape' or other condition => quit the exp
@@ -157,7 +160,7 @@ def runExperiment():
     trials.addData("Lab", "")
 
     ################### LOOP STARTS HERE ###########################
-    for thisTrial in trials:
+    for trial_index, thisTrial in enumerate(trials):
         # ------Prepare to start Routine "trial"-------
         continueRoutine = True
         win.mouseVisible = False
@@ -165,7 +168,7 @@ def runExperiment():
 
         while True:
             frame += 1
-            
+
             keys = event.getKeys()
             if len(keys) > 0:
                 if "escape" in keys:  # Press ESC 2 times to abort the expeirment
@@ -197,7 +200,6 @@ def runExperiment():
         thisExp.nextEntry()
         if not continueRoutine:  # a component has requested a forced-end of Routine
             break
-
 
     # Flip one final time so any remaining win.callOnFlip()
     # and win.timeOnFlip() tasks get executed before quitting
