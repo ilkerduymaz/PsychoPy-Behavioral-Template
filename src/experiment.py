@@ -33,6 +33,7 @@ class Experiment:
         self.monitor = monitors.Monitor(
             "ExpMonitor", width=self.screen_width_mm, distance=self.screen_distance_mm
         )  # monitor profile in Monitor Center
+        self.monitor.setSizePix(self.screen_res)
         self.fullscreen = True
         self.background_color = [0.5, 0.5, 0.5]
         self.text_color = [1, 1, 1]

@@ -8,7 +8,7 @@ class BlockBreak(Trial):
         self.trl_type = "BlockBreak"
         self.seconds = 5  # Imposed minimum break duration in seconds
         self.break_frames = self.seconds * exp.refresh_rate  # Imposed minimum break duration in frames
-        self.total_frames = 500000 # Arbitrary number of frames to make the for loop continue until keypress
+        self.total_frames = -1 # Arbitrary number of frames to make the for loop continue until keypress
         self.skip = False  # skip to the next trial?
         self.break_taken = 0
         self.text_color = exp.text_color

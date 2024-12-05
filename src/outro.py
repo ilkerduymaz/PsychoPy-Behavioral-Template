@@ -7,7 +7,7 @@ class Outro(Trial):
         super(Outro, self).__init__(exp, win)
         self.trl_type = "Outro"
         # Arbitrary number of frames to make the for loop continue until keypress
-        self.total_frames = 500000
+        self.total_frames = -1
         self.skip = False  # skip to the next trial?
         self.text_color = exp.text_color
         
