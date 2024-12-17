@@ -32,24 +32,6 @@ def runExperiment():
     # Initialize Experiment object
     exp = Experiment()
 
-    # If not run on the lab PC, ask for info required for visual angle calculation
-    if exp.distributed_ver:
-        monDW = {
-            "Your distance to the screen in millimeters:": 570,
-            "The width of your screen in millimeters:": 310,
-        }
-
-        dlgmon = gui.DlgFromDict(dictionary=monDW, sortKeys=False, title=exp.expName)
-
-        if dlgmon.OK == False:
-            core.quit()
-
-        exp.monitor = monitors.Monitor(
-            "ExpMonitor",
-            width=monDW["The width of your screen in millimeters:"],
-            distance=monDW["Your distance to the screen in millimeters:"],
-        )  # sets up the monitor
-
     ##############################################################
     # Set up data folders and filenames
     data_dir = os.path.join(_thisDir, "data")  # Main folder for data
@@ -110,7 +92,7 @@ def runExperiment():
     win.refreshThreshold = 1 / exp.refresh_rate + frameTolerance
     ########################################################################
 
-    # Measure the frame rate of the monitor and raise error if it does not match the prespecified refresh rate
+    # Measure the frame rate of the monitor
     expInfo["frameRate"] = win.getActualFrameRate()
 
     # Setup ioHub

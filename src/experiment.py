@@ -7,7 +7,8 @@ from .intro import Intro
 from .outro import Outro
 from .responsescreen import ResponseScreen
 from .ratingscreen import RatingScreen
-from psychopy import monitors, core
+import psychopy
+from psychopy import gui, visual, core, data, event, logging, monitors
 from psychopy.tools.monitorunittools import deg2pix
 from random import shuffle
 from itertools import chain
@@ -17,6 +18,7 @@ from numpy.random import randint, normal, choice
 from PIL import Image, ImageDraw
 import re
 import cv2
+import binascii
 
 
 class Experiment:
@@ -56,15 +58,31 @@ class Experiment:
         self.lab = "lab name/location"  # add the location of the experiment to the data for future reference
         self.doPush = True  # push to github
 
+    def popUpDlg(self):
+        expInfo = {
+            "participant": binascii.b2a_hex(os.urandom(2)).decode("utf-8"),
+            "gender": ["Male", "Female", "Non-Binary/Other"],
+            "age": [],
+        }
+        dlg = gui.DlgFromDict(dictionary=expInfo, sortKeys=False, title="Experiment")
+        if dlg.OK == False:
+            core.quit()  # user pressed cancel
+
+        expInfo["date"] = data.getDateStr()  # add a simple timestamp
+        expInfo["psychopyVersion"] = psychopy.__version__
+        expInfo["psychopyPath"] = psychopy.__file__
+
+        self.expInfo = expInfo
+
     def defineTrials(self, win):
         self.trials = [
             {"cond_trl": ResponseScreen(self, win), "nreps": self.cond_per_block}
         ]
-    
+
     def addBeforeTrials(self, win):
         self.fixation = Fixation(self, win, duration=1)
         self.before_trials = [self.fixation]
-    
+
     def addAfterTrials(self, win):
         self.trial_break = TrialBreak(self, win)
         self.after_trials = [self.trial_break]
@@ -91,7 +109,7 @@ class Experiment:
             trial_group = [self.before_trials, 
                            [cond["cond_trl"]], 
                            self.after_trials]
-            
+
             trial_group = list(chain(*trial_group))
 
             cond_group = [
@@ -100,7 +118,7 @@ class Experiment:
             ]
 
             block.extend(cond_group)
-        
+
         return block
 
     def initTrials(self, win):
