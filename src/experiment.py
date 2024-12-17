@@ -57,7 +57,7 @@ class Experiment:
     doPush = True  # push to github
 
     def __init__(self, root_dir):
-        self.loadConfigJson(root_dir)
+        # self.loadConfigJson(root_dir)
 
         if self.expName == None:
             self.expName = os.path.basename(root_dir)
@@ -100,10 +100,10 @@ class Experiment:
             self.__dict__ = json.load(f)
     
     def exportConfigJson(self, root_dir):
-        print(vars(self))
+        print(Experiment.__dict__)
         # export object's attributes to a json file
         with open(os.path.join(root_dir, "config.json"), "w") as f:
-            json.dump(vars(self), f, indent=4)
+            json.dump(Experiment.__dict__, f, indent=4)
 
     def popUpDlg(self):
         expInfo = {
