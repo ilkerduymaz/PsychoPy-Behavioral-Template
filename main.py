@@ -6,7 +6,6 @@ import os, binascii, subprocess
 import psychopy.iohub as io
 from psychopy.hardware import keyboard
 from src.experiment import Experiment
-from src.experimentgroup import ExperimentGroup
 from src.send_notification import send_notification
 import sys
 
