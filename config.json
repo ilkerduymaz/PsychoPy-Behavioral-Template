@@ -10,9 +10,9 @@
     "screen_width_mm": 545,
     "fullscreen": true,
     "background_color": [
-        0.5,
-        0.5,
-        0.5
+        -0.5,
+        -0.5,
+        -0.5
     ],
     "text_color": [
         1,
