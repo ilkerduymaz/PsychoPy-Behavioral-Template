@@ -100,6 +100,7 @@ class Experiment:
             self.__dict__ = json.load(f)
     
     def exportConfigJson(self, root_dir):
+        print(vars(self))
         # export object's attributes to a json file
         with open(os.path.join(root_dir, "config.json"), "w") as f:
             json.dump(vars(self), f, indent=4)
