@@ -57,7 +57,8 @@ class Experiment:
     doPush = True  # push to github
 
     def __init__(self, root_dir):
-
+        self.loadConfigJson(root_dir)
+        
         if self.expName == None:
             self.expName = os.path.basename(root_dir)
 
@@ -89,7 +90,7 @@ class Experiment:
         self.orderDataCols()
     
     def loadConfigJson(self, root_dir):
-        
+
         if not os.path.exists(os.path.join(root_dir, "config.json")):
             self.exportConfigJson(root_dir)
             return 
