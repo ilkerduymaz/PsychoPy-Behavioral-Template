@@ -19,15 +19,15 @@ def runExperiment():
     exp = Experiment(_thisDir)
     win = exp.win
 
-    # # Setup ioHub
-    # ioConfig = {}
+    # Setup ioHub
+    ioConfig = {}
 
-    # # Setup iohub keyboard
-    # ioConfig["Keyboard"] = dict(use_keymap="psychopy")
-    # ioServer = io.launchHubServer(window=win, **ioConfig)
+    # Setup iohub keyboard
+    ioConfig["Keyboard"] = dict(use_keymap="psychopy")
+    ioServer = io.launchHubServer(window=win, **ioConfig)
 
-    # # create a default keyboard (e.g. to check for escape)
-    # defaultKeyboard = keyboard.Keyboard(backend="iohub")
+    # create a default keyboard (e.g. to check for escape)
+    defaultKeyboard = keyboard.Keyboard(backend="iohub")
 
     # Set priority
     io.devices.Computer.setPriority("high", disable_gc=False)
