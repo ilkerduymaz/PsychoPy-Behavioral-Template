@@ -17,7 +17,6 @@ def runExperiment():
 
     # Initialize Experiment object
     exp = Experiment(_thisDir)
-    print(vars(exp))
     win = exp.win
 
     # # Setup ioHub

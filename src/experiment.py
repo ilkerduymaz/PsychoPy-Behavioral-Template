@@ -57,13 +57,14 @@ class Experiment:
     doPush = True  # push to github
 
     def __init__(self, root_dir):
-        # self.loadConfigJson(root_dir)
 
         if self.expName == None:
             self.expName = os.path.basename(root_dir)
 
         if self.lab == None:
             self.lab = socket.gethostname()
+
+        self.loadConfigJson(root_dir)
 
         ### Utility ###
         self.clock = core.Clock()  # for timing
@@ -100,10 +101,10 @@ class Experiment:
             self.__dict__ = json.load(f)
     
     def exportConfigJson(self, root_dir):
-        print(Experiment.__dict__)
+        print(self.__dict__)
         # export object's attributes to a json file
         with open(os.path.join(root_dir, "config.json"), "w") as f:
-            json.dump(Experiment.__dict__, f, indent=4)
+            json.dump(self.__dict__, f, indent=4)
 
     def popUpDlg(self):
         expInfo = {
