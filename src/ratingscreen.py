@@ -4,7 +4,7 @@ from psychopy import visual
 class RatingScreen(Trial):
     def __init__(self, exp, win, question="SampleQuestion", choices=[]):
         super().__init__(exp, win)
-        self.total_frames = 9999999999
+        self.total_frames = -1
         self.trl_type = "RatingScreen"
         
         self.question = question

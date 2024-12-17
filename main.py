@@ -6,7 +6,7 @@ import os, binascii, subprocess
 import psychopy.iohub as io
 from psychopy.hardware import keyboard
 from src.experiment import Experiment
-from videoexp import VideoExp
+from src.experimentgroup import ExperimentGroup
 from src.send_notification import send_notification
 import sys
 
@@ -31,7 +31,7 @@ def runExperiment():
     expInfo["psychopyPath"] = psychopy.__file__
 
     # Initialize Experiment object
-    exp = VideoExp()
+    exp = Experiment()
 
     # If not run on the lab PC, ask for info required for visual angle calculation
     if exp.distributed_ver:

@@ -8,7 +8,7 @@ class TrialBreak(Trial):
         self.trl_type = "TrialBreak"
         self.seconds = 3  # Imposed minimum break duration in seconds
         self.break_frames = self.seconds * exp.refresh_rate # Imposed minimum break duration in frames
-        self.total_frames = 500000 # Arbitrary number of frames to make the for loop continue until keypress
+        self.total_frames = -1 # Arbitrary number of frames to make the for loop continue until keypress
         self.skip = False  # skip to the next trial?   
         self.text_color = exp.text_color  
         self.initStim(win)
