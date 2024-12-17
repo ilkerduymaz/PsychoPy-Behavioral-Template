@@ -58,7 +58,7 @@ class Experiment:
 
     def __init__(self, root_dir):
         self.loadConfigJson(root_dir)
-        
+
         if self.expName == None:
             self.expName = os.path.basename(root_dir)
 
@@ -102,7 +102,7 @@ class Experiment:
     def exportConfigJson(self, root_dir):
         # export object's attributes to a json file
         with open(os.path.join(root_dir, "config.json"), "w") as f:
-            json.dump(self.__dict__, f, indent=4)
+            json.dump(vars(self), f, indent=4)
 
     def popUpDlg(self):
         expInfo = {
