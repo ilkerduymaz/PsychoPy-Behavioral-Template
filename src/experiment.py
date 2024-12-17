@@ -91,21 +91,24 @@ class Experiment:
         ####################### TRIAL HANDLING ####################
         self.initTrials(self.win)  # initialize the trial structure
         self.orderDataCols()
-    
+
     def loadConfigJson(self, root_dir):
 
-        if not os.path.exists(os.path.join(root_dir, "config.json")):
+        if not os.path.exists(os.path.join(root_dir, f"{self.__class__.__name__}_config.json")):
             self.exportConfigJson(root_dir)
             return 
-        
+
         # load object's attributes from a json file
-        with open(os.path.join(root_dir, "config.json"), "r") as f:
+        with open(
+            os.path.join(root_dir, f"{self.__class__.__name__}_config.json"), "r"
+        ) as f:
             self.__dict__ = json.load(f)
-    
+
     def exportConfigJson(self, root_dir):
-        print(self.__dict__)
         # export object's attributes to a json file
-        with open(os.path.join(root_dir, "config.json"), "w") as f:
+        with open(
+            os.path.join(root_dir, f"{self.__class__.__name__}_config.json"), "w"
+        ) as f:
             json.dump(self.__dict__, f, indent=4)
 
     def popUpDlg(self):

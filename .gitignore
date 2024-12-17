@@ -156,4 +156,4 @@ data/*
 videos/*
 pass.txt
 backup/*
-config.json
+*_config.json
