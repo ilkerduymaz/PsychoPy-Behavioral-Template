@@ -31,32 +31,30 @@ class Experiment:
     """
     Class for defining experiment parameters like conditions, repetitions, and trial durations.
     """
-    expName = None  # Name of the experiment as it will appear in the data file
-    lab = None  # add the location of the experiment to the data for future reference
-
-    ### Screen ###
-    screen_res = (1920, 1080)  # screen resolution
-    refresh_rate = 60  # screen refresh rate
-    screen_distance_mm = 570  # participant's distance to the screen
-    screen_width_mm = 545  # width of the experiment monitor
-    monitor = monitors.Monitor(
-        "ExpMonitor", width=screen_width_mm, distance=screen_distance_mm
-    )  # monitor profile in Monitor Center
-    monitor.setSizePix(screen_res)
-    fullscreen = True
-    background_color = [0.5, 0.5, 0.5]
-    text_color = [1, 1, 1]
-
-    # Block parameters
-    blocked = True  # True for block design, False for random design
-    total_blocks = 3  # number of blocks
-    cond_per_block = 2  # number of repetitions for each condition within a block
-
-    ### Misc ###
-    autopilot = False
-    doPush = True  # push to github
-
     def __init__(self, root_dir):
+        self.expName = None  # Name of the experiment as it will appear in the data file
+        self.lab = None  # add the location of the experiment to the data for future reference
+
+        ### Screen ###
+        self.screen_res = (1920, 1080)  # screen resolution
+        self.refresh_rate = 60  # screen refresh rate
+        self.screen_distance_mm = 570  # participant's distance to the screen
+        self.screen_width_mm = 545  # width of the experiment monitor
+        self.fullscreen = True
+        self.background_color = [0.5, 0.5, 0.5]
+        self.text_color = [1, 1, 1]
+
+        # Block parameters
+        self.blocked = True  # True for block design, False for random design
+        self.total_blocks = 3  # number of blocks
+        self.cond_per_block = 2  # number of repetitions for each condition within a block
+
+        ### Misc ###
+        self.autopilot = False
+        self.doPush = True  # push to github
+
+        self.loadConfigJson(root_dir)
+        #############################################################
 
         if self.expName == None:
             self.expName = os.path.basename(root_dir)
@@ -64,7 +62,11 @@ class Experiment:
         if self.lab == None:
             self.lab = socket.gethostname()
 
-        self.loadConfigJson(root_dir)
+        ### Monitor ###
+        self.monitor = monitors.Monitor(
+            "ExpMonitor", width=self.screen_width_mm, distance=self.screen_distance_mm
+        )  # monitor profile in Monitor Center
+        self.monitor.setSizePix(self.screen_res)
 
         ### Utility ###
         self.clock = core.Clock()  # for timing
