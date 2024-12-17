@@ -24,6 +24,7 @@ import cv2
 import binascii
 import subprocess
 import socket
+import json
 
 
 class Experiment:
@@ -82,13 +83,25 @@ class Experiment:
 
         # Set up window
         self.initWindow()
-        
-        # Set up ioHub
-        # self.initIO()
 
         ####################### TRIAL HANDLING ####################
         self.initTrials(self.win)  # initialize the trial structure
         self.orderDataCols()
+    
+    def loadConfigJson(self, root_dir):
+        
+        if not os.path.exists(os.path.join(root_dir, "config.json")):
+            self.exportConfigJson(root_dir)
+            return 
+        
+        # load object's attributes from a json file
+        with open(os.path.join(root_dir, "config.json"), "r") as f:
+            self.__dict__ = json.load(f)
+    
+    def exportConfigJson(self, root_dir):
+        # export object's attributes to a json file
+        with open(os.path.join(root_dir, "config.json"), "w") as f:
+            json.dump(self.__dict__, f, indent=4)
 
     def popUpDlg(self):
         expInfo = {
@@ -140,20 +153,6 @@ class Experiment:
 
         # Measure the frame rate of the monitor
         self.expInfo["frameRate"] = self.win.getActualFrameRate()
-
-    def initIO(self):
-        # Setup ioHub
-        ioConfig = {}
-
-        # Setup iohub keyboard
-        ioConfig["Keyboard"] = dict(use_keymap="psychopy")
-        ioServer = io.launchHubServer(window=self.win, **ioConfig)
-
-        # create a default keyboard (e.g. to check for escape)
-        defaultKeyboard = keyboard.Keyboard(backend="iohub")
-
-        # Set priority
-        io.devices.Computer.setPriority("high", disable_gc=False)
 
     def initExpData(self):
         self.expData = data.ExperimentHandler(
