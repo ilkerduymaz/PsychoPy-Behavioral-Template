@@ -12,7 +12,7 @@ class ResponseScreen(Trial):
         self.total_frames = int(exp.refresh_rate * self.duration)
 
         # A dict of possible answers and their corresponding keys
-        self.bindings = {"kitchen": "k", "living room": "l"}
+        self.bindings = {"Answer1": "k", "Answer2": "l"}
         self.correct_answer = None
         self.accuracy = None
 

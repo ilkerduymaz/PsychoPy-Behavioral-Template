@@ -1,0 +1,2 @@
+﻿trials.thisRepN,trials.thisTrialN,trials.thisN,trials.thisIndex,thisRow.t,notes,Participant,BlockN,TrialType,TrialStart,TrialEnd,TimeReacted,PressedKey,Answer,BreakTaken,ExpDur,Lab,participant,gender,age,date,psychopyVersion,psychopyPath,frameRate,
+0,0,0,0,,,,1,,2.836212635040283,,,,,,,fedora,1598,Male,,2024-12-18_09h00.04.637,2024.2.4,/opt/psychopy_2024.2.4_py3.10/lib/python3.10/site-packages/psychopy/__init__.py,143.2294989038308,
