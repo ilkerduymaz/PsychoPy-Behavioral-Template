@@ -1,26 +1,9 @@
-from .trialgroup import TrialGroup
 from .trialsequence import TrialSequence
-from .sampletrial import SampleTrial
-from .trialbreak import TrialBreak
-from .blockbreak import BlockBreak
-from .fixation import Fixation
-from .intro import Intro
-from .outro import Outro
 from .responsescreen import ResponseScreen
-from .ratingscreen import RatingScreen
 import psychopy
 from psychopy import gui, visual, core, data, event, logging, monitors
-import psychopy.iohub as io
-from psychopy.hardware import keyboard
-from psychopy.tools.monitorunittools import deg2pix
-from random import shuffle
-from itertools import chain
-import copy, time, glob, os
-import numpy as np
-from numpy.random import randint, normal, choice
-from PIL import Image, ImageDraw
-import re
-import cv2
+import time 
+import os
 import binascii
 import subprocess
 import socket
@@ -241,8 +224,6 @@ class Experiment:
         self.trialhandler.addData("Participant", "")
         self.trialhandler.addData("BlockN", "")
         self.trialhandler.addData("TrialType", "")
-        self.trialhandler.addData("ImageID", "")
-        self.trialhandler.addData("Scene", "")
         self.trialhandler.addData("TrialStart", "")
         self.trialhandler.addData("TrialEnd", "")
         self.trialhandler.addData("TimeReacted", "")

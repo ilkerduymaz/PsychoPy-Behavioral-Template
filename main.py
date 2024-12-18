@@ -1,12 +1,9 @@
-#!/usr/bin/env python3.8
+#!/usr/bin/env python3.10
 # -*- coding: utf-8 -*-
-import psychopy
-from psychopy import gui, visual, core, data, event, logging, monitors
-import os, binascii, subprocess
+from psychopy import core, event, logging
+import os
 import psychopy.iohub as io
-from psychopy.hardware import keyboard
 from src.experiment import Experiment
-from src.send_notification import send_notification
 import sys
 
 
