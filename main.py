@@ -15,7 +15,13 @@ def runExperiment():
     # Initialize Experiment object
     exp = Experiment(_thisDir)
     win = exp.win
+    
+    # Setup ioHub
+    ioConfig = {}
 
+    # Setup iohub keyboard
+    ioConfig["Keyboard"] = dict(use_keymap="psychopy")
+    ioServer = io.launchHubServer(window=win, **ioConfig)
     # Set priority
     io.devices.Computer.setPriority("high", disable_gc=False)
 
