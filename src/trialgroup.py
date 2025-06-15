@@ -9,7 +9,7 @@ class TrialGroup(Trial):
 
     def getAttributes(self):
         self.__dict__.update(self.trial_group[self.trial_index].__dict__)
-        
+
     def reset(self):
         super().reset()
         self.total_frames = self.total_frames_og
@@ -21,6 +21,9 @@ class TrialGroup(Trial):
         self.trl_type = "TrialGroup"
         for trl in self.trial_group:
             trl.reset()
+
+    def writeData(self, exp, trials):
+        trials.addData("TrialType", "TrialGroup")
 
     def drawTrial(self, exp, win, frame=0, keys=[], trials=None, dataobj=[], **kwargs):
         if frame == 0:
