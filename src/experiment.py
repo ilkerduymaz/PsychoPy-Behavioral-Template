@@ -417,7 +417,6 @@ class Experiment:
 
     def orderDataCols(self):
         # Order data headers
-        self.trialhandler.addData("participant", "")
         self.trialhandler.addData("BlockN", "")
         self.trialhandler.addData("Class", "")
         self.trialhandler.addData("TimeReacted", "")
