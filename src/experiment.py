@@ -8,6 +8,7 @@ import binascii
 import subprocess
 import socket
 import json
+import configparser
 
 
 class Experiment:
@@ -36,7 +37,8 @@ class Experiment:
         self.autopilot = False
         self.doPush = True  # push to github
 
-        self.loadConfigJson(root_dir)
+        # self.loadConfigJson(root_dir)
+        self.loadConfigIni(root_dir)
         #############################################################
 
         if self.expName == None:
@@ -75,11 +77,89 @@ class Experiment:
         self.initTrials(self.win)  # initialize the trial structure
         self.orderDataCols()
 
+    def getDefaults(self):
+        defaults = {
+            "expName": {
+                "value": None,
+                "comment": "Name of the experiment as it will appear in the data file",
+                "section": "GENERAL",
+            },
+            "lab": {
+                "value": None,
+                "comment": "add the location of the experiment to the data for future reference",
+                "section": "GENERAL",
+            },
+            "screen_res": {
+                "value": self.screen_res,
+                "comment": "screen resolution",
+                "section": "SCREEN",
+            },
+            "refresh_rate": {
+                "value": self.refresh_rate,
+                "comment": "screen refresh rate",
+                "section": "SCREEN",
+            },
+            "screen_distance_mm": {
+                "value": self.screen_distance_mm,
+                "comment": "participant's distance to the screen",
+                "section": "SCREEN",
+            },
+            "screen_width_mm": {
+                "value": self.screen_width_mm,
+                "comment": "width of the experiment monitor",
+                "section": "SCREEN",
+            },
+            "fullscreen": {
+                "value": self.fullscreen,
+                "comment": "True for fullscreen, False for windowed",
+                "section": "SCREEN",
+            },
+            "background_color": {
+                "value": self.background_color,
+                "comment": "background color",
+                "section": "SCREEN",
+            },
+            "text_color": {
+                "value": self.text_color,
+                "comment": "text color",
+                "section": "SCREEN",
+            },
+            "autopilot": {
+                "value": self.autopilot,
+                "comment": "True for autopilot",
+                "section": "MISC",
+            },
+            "doPush": {
+                "value": self.doPush,
+                "comment": "push to github",
+                "section": "MISC",
+            },
+            "blocked": {
+                "value": self.blocked,
+                "comment": "True for block design, False for random design",
+                "section": "BLOCKS",
+            },
+            "total_blocks": {
+                "value": self.total_blocks,
+                "comment": "number of blocks",
+                "section": "BLOCKS",
+            },
+            "cond_per_block": {
+                "value": self.cond_per_block,
+                "comment": "number of repetitions for each condition within a block",
+                "section": "BLOCKS",
+            },
+        }
+        return defaults
+
     def loadConfigJson(self, root_dir):
 
         if not os.path.exists(os.path.join(root_dir, f"{self.__class__.__name__}_config.json")):
             self.exportConfigJson(root_dir)
             return 
+
+        if not os.path.exists(os.path.join(root_dir, f"{self.__class__.__name__}_config.ini")):
+            self.exportConfigIni(root_dir)
 
         # load object's attributes from a json file
         with open(
@@ -93,6 +173,70 @@ class Experiment:
             os.path.join(root_dir, f"{self.__class__.__name__}_config.json"), "w"
         ) as f:
             json.dump(self.__dict__, f, indent=4)
+
+    def loadConfigIni(self, root_dir):
+        config = configparser.ConfigParser()
+        config.optionxform = str
+        filename = os.path.join(root_dir, f"{self.__class__.__name__}_config.ini")
+        config.read(filename)
+        kwargs = {}
+
+        import ast
+
+        def infer_type(value):
+            """
+            Infer Python types from a string.
+            Handles bool, int, float, tuple, list, and str.
+            """
+            value = value.strip()
+
+            # First, try literal_eval (handles tuples, lists, numbers, booleans)
+            try:
+                result = ast.literal_eval(value)
+                return result
+            except (ValueError, SyntaxError):
+                pass
+
+            # Fallback to lowercased booleans
+            if value.lower() in {'true', 'yes', 'on'}:
+                return True
+            elif value.lower() in {'false', 'no', 'off'}:
+                return False
+
+            return value  # Default: str
+
+        for section in config.sections():
+            kwargs = kwargs | dict({k: infer_type(v) for k, v in config[section].items()})
+
+        print([type(v) for v in kwargs.values()])
+
+        self.__dict__.update(kwargs)
+
+    def exportConfigIni(self, root_dir):
+        config = configparser.ConfigParser(allow_no_value=True)
+        config.optionxform = str
+        defaults = self.getDefaults()
+
+        for name, value in vars(self).items():
+            if name in defaults:
+                section = defaults[name]["section"]
+                comment = defaults[name]["comment"]
+            else:
+                section = "DEFAULT"
+                comment = None
+
+            if not config.has_section(section):
+                config[section] = {}
+
+            if comment is not None:
+                config.set(section, f"# {comment}")
+
+            config[section][name] = str(value)
+
+        with open(
+            os.path.join(root_dir, f"{self.__class__.__name__}_config.ini"), "w"
+        ) as configfile:
+            config.write(configfile)
 
     def popUpDlg(self):
         expInfo = {
