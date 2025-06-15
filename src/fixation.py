@@ -30,6 +30,3 @@ class Fixation(Trial):
         
         if frame == self.total_frames -1:
             exp.last_resp_accuracy = None
-
-    def writeData(self, exp, trials):
-        pass

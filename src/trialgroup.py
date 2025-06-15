@@ -58,6 +58,7 @@ class TrialGroup(Trial):
 
         if self.trial_index == len(self.trial_group):
             self.skip = True
+            self.writeData(exp, trials)
         else:
             self.skip = False  # Prevent individual trials overriding the
             # skip due to getAttributes()

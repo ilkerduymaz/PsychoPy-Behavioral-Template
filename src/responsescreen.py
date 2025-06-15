@@ -65,7 +65,7 @@ class ResponseScreen(Trial):
                 exp.last_resp_accuracy = self.accuracy
 
     def writeData(self, exp, trials):
-        # super().writeData(exp, trials)
+        super().writeData(exp, trials)
         trials.addData("Answer", self.answer)
         trials.addData("PressedKey", self.pressedkey)
         trials.addData("TimeReacted", self.reaction_time)
