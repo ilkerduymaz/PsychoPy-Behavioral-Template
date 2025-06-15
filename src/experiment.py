@@ -273,7 +273,7 @@ class Experiment:
 
     def popUpDlg(self):
         expInfo = {
-            "participant": str(binascii.b2a_hex(os.urandom(2)).decode("utf-8")),
+            "participant": binascii.b2a_hex(os.urandom(2)).decode("utf-8"),
             "gender": ["Male", "Female", "Non-Binary/Other"],
             "age": [],
         }
