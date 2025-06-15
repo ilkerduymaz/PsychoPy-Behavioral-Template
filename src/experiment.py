@@ -16,27 +16,10 @@ class Experiment:
     Class for defining experiment parameters like conditions, repetitions, and trial durations.
     """
     def __init__(self, root_dir):
-        self.expName = None  # Name of the experiment as it will appear in the data file
-        self.lab = None  # add the location of the experiment to the data for future reference
 
-        ### Screen ###
-        self.screen_res = (1920, 1080)  # screen resolution
-        self.refresh_rate = 60  # screen refresh rate
-        self.screen_distance_mm = 570  # participant's distance to the screen
-        self.screen_width_mm = 545  # width of the experiment monitor
-        self.fullscreen = True
-        self.background_color = [0.5, 0.5, 0.5]
-        self.text_color = [1, 1, 1]
+        self.initDefaults(root_dir)
 
-        # Block parameters
-        self.blocked = True  # True for block design, False for random design
-        self.total_blocks = 3  # number of blocks
-        self.cond_per_block = 2  # number of repetitions for each condition within a block
-
-        ### Misc ###
-        self.autopilot = False
-        self.doPush = True  # push to github
-
+        #############################################################
         # self.loadConfigJson(root_dir)
         self.loadConfigIni(root_dir)
         #############################################################
@@ -51,7 +34,7 @@ class Experiment:
         self.monitor = monitors.Monitor(
             "ExpMonitor", width=self.screen_width_mm, distance=self.screen_distance_mm
         )  # monitor profile in Monitor Center
-        self.monitor.setSizePix(self.screen_res)
+        self.monitor.setSizePix(self.screen_res) # resolution won't be set correctly without this
 
         ### Utility ###
         self.clock = core.Clock()  # for timing
@@ -77,7 +60,41 @@ class Experiment:
         self.initTrials(self.win)  # initialize the trial structure
         self.orderDataCols()
 
-    def getDefaults(self):
+    def initDefaults(self, root_dir):
+        self.expName = os.path.basename(
+            root_dir
+        )  # Name of the experiment as it will appear in the data file
+        self.lab = (
+            socket.gethostname()
+        )  # add the location of the experiment to the data for future reference
+
+        ### Screen ###
+        self.screen_res = (1920, 1080)  # screen resolution
+        self.force_resolution = (
+            False  # force screen resolution by using commandline tools
+        )
+        self.refresh_rate = 60  # screen refresh rate
+        self.force_refresh_rate = (
+            False  # force screen refresh rate by using commandline tools
+        )
+        self.screen_distance_mm = 570  # participant's distance to the screen
+        self.screen_width_mm = 545  # width of the experiment monitor
+        self.fullscreen = True
+        self.background_color = [0.5, 0.5, 0.5]
+        self.text_color = [1, 1, 1]
+
+        # Block parameters
+        self.blocked = True  # True for block design, False for random design
+        self.total_blocks = 3  # number of blocks
+        self.cond_per_block = (
+            2  # number of repetitions for each condition within a block
+        )
+
+        ### Misc ###
+        self.autopilot = False
+        self.doPush = True  # push to github
+
+    def getDefaultsDict(self):
         defaults = {
             "expName": {
                 "value": None,
@@ -94,9 +111,19 @@ class Experiment:
                 "comment": "screen resolution",
                 "section": "SCREEN",
             },
+            "force_resolution": {
+                "value": self.force_resolution,
+                "comment": "force screen resolution by using commandline tools",
+                "section": "SCREEN",
+            },
             "refresh_rate": {
                 "value": self.refresh_rate,
                 "comment": "screen refresh rate",
+                "section": "SCREEN",
+            },
+            "force_refresh_rate": {
+                "value": self.force_refresh_rate,
+                "comment": "force screen refresh rate by using commandline tools",
                 "section": "SCREEN",
             },
             "screen_distance_mm": {
@@ -177,7 +204,12 @@ class Experiment:
     def loadConfigIni(self, root_dir):
         config = configparser.ConfigParser()
         config.optionxform = str
-        filename = os.path.join(root_dir, f"{self.__class__.__name__}_config.ini")
+        filename = os.path.join(root_dir, f"{self.__class__.__name__}_{self.lab}_config.ini")
+
+        if not os.path.exists(filename):
+            self.exportConfigIni(root_dir)
+            return
+
         config.read(filename)
         kwargs = {}
 
@@ -208,14 +240,12 @@ class Experiment:
         for section in config.sections():
             kwargs = kwargs | dict({k: infer_type(v) for k, v in config[section].items()})
 
-        print([type(v) for v in kwargs.values()])
-
         self.__dict__.update(kwargs)
 
     def exportConfigIni(self, root_dir):
         config = configparser.ConfigParser(allow_no_value=True)
         config.optionxform = str
-        defaults = self.getDefaults()
+        defaults = self.getDefaultsDict()
 
         for name, value in vars(self).items():
             if name in defaults:
@@ -234,7 +264,8 @@ class Experiment:
             config[section][name] = str(value)
 
         with open(
-            os.path.join(root_dir, f"{self.__class__.__name__}_config.ini"), "w"
+            os.path.join(root_dir, f"{self.__class__.__name__}_{self.lab}_config.ini"),
+            "w",
         ) as configfile:
             config.write(configfile)
 
