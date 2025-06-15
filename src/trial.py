@@ -4,7 +4,7 @@ import time
 class Trial:
     def __init__(self, exp, win):
         ### Trial Info ###
-        self.trl_type = "Trial"
+        self.trl_type = self.__class__.__name__
 
         ### Duration ###
         self.trial_duration = 3 # in seconds
@@ -27,7 +27,7 @@ class Trial:
         pass
 
     def writeData(self, exp, trials):
-        trials.addData('TrialType', self.trl_type)
+        trials.addData("Class", self.trl_type)
         trials.addData(f'TrialEnd-{self.trl_type}', exp.clock.getTime())
 
     def broadcastVariables(self):   

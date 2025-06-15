@@ -419,9 +419,7 @@ class Experiment:
         # Order data headers
         self.trialhandler.addData("Participant", "")
         self.trialhandler.addData("BlockN", "")
-        self.trialhandler.addData("TrialType", "")
-        self.trialhandler.addData("TrialStart", "")
-        self.trialhandler.addData("TrialEnd", "")
+        self.trialhandler.addData("Class", "")
         self.trialhandler.addData("TimeReacted", "")
         self.trialhandler.addData("PressedKey", "")
         self.trialhandler.addData("Answer", "")

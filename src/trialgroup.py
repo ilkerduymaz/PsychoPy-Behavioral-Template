@@ -23,7 +23,7 @@ class TrialGroup(Trial):
             trl.reset()
 
     def writeData(self, exp, trials):
-        trials.addData("TrialType", "TrialGroup")
+        trials.addData("Class", "TrialGroup")
 
     def drawTrial(self, exp, win, frame=0, keys=[], trials=None, dataobj=[], **kwargs):
         if frame == 0:
