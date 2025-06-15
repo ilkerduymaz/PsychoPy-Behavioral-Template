@@ -32,7 +32,7 @@ class MonitorTools:
         if resolution and refresh_rate:
             if self.system == "Windows":
                 return self._set_windows_settings(resolution, refresh_rate)
-            elif self.system == "Linux":
+            elif self.system == "Linux": # doesn't work at the moment
                 return self._set_linux_settings(resolution, refresh_rate)
             else:
                 raise NotImplementedError("Unsupported OS")
