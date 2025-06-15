@@ -3,7 +3,7 @@
 from psychopy import core, event, logging
 import os
 import psychopy.iohub as io
-from src.experiment import Experiment
+from CustomExp import CustomExp
 import sys
 
 
@@ -13,7 +13,7 @@ def runExperiment():
     os.chdir(_thisDir)
 
     # Initialize Experiment object
-    exp = Experiment(_thisDir)
+    exp = CustomExp(_thisDir)
     win = exp.win
     
     # Setup ioHub
