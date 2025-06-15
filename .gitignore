@@ -157,3 +157,4 @@ videos/*
 pass.txt
 backup/*
 *_config.json
+*.exe
