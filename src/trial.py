@@ -28,7 +28,7 @@ class Trial:
     
     def writeData(self, exp, trials):
         trials.addData('TrialType', self.trl_type)
-        trials.addData('TrialEnd', exp.clock.getTime())
+        trials.addData(f'TrialEnd-{self.trl_type}', exp.clock.getTime())
 
     def broadcastVariables(self):   
         broadcast = {}
@@ -44,7 +44,7 @@ class Trial:
         self.updateStim(exp, win, frame=frame)
 
         if frame == 0:
-            trials.addData('TrialStart', exp.clock.getTime())
+            trials.addData(f'TrialStart-{self.trl_type}', exp.clock.getTime())
 
         if self.stim:
             for stim in self.stim:
