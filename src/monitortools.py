@@ -7,6 +7,14 @@ import os
 class MonitorTools:
     def __init__(self):
         self.system = platform.system()
+    
+    def getResolution(self):
+        settings = self.get_settings()
+        return settings["resolution"]
+
+    def getRefreshRate(self):
+        settings = self.get_settings()
+        return settings["refresh_rate"]
 
     def get_settings(self):
         if self.system == "Windows":
@@ -17,6 +25,10 @@ class MonitorTools:
             raise NotImplementedError("Unsupported OS")
 
     def set_settings(self, resolution=None, refresh_rate=None):
+        # if resolution is a tuple, convert it to a string
+        if isinstance(resolution, tuple):
+            resolution = f"{resolution[0]}x{resolution[1]}"
+
         if resolution and refresh_rate:
             if self.system == "Windows":
                 return self._set_windows_settings(resolution, refresh_rate)

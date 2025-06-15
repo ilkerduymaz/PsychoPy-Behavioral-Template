@@ -9,6 +9,7 @@ import subprocess
 import socket
 import json
 import configparser
+from .monitortools import MonitorTools
 
 
 class Experiment:
@@ -31,6 +32,7 @@ class Experiment:
             self.lab = socket.gethostname()
 
         ### Monitor ###
+        self.forceMonitorSettings() # depends on self.force_resolution and self.force_refresh
         self.monitor = monitors.Monitor(
             "ExpMonitor", width=self.screen_width_mm, distance=self.screen_distance_mm
         )  # monitor profile in Monitor Center
@@ -296,6 +298,25 @@ class Experiment:
                 os.mkdir(d)
 
         self.savefilename = f"{self.expInfo['participant']}_{self.expName}_{self.expInfo['date']}"
+
+    def forceMonitorSettings(self):
+        montool = MonitorTools()
+
+        current_res = montool.getResolution()
+        current_refresh = montool.getRefreshRate()
+
+        if current_res != self.screen_res and self.force_resolution:
+            new_res = self.screen_res
+        else:
+            new_res = current_res
+
+        if current_refresh != self.refresh_rate and self.force_refresh_rate:
+            new_refresh = self.refresh_rate
+        else:
+            new_refresh = current_refresh
+
+        montool.set_settings(new_res, new_refresh)
+
 
     def initWindow(self):
         self.win = visual.Window(
