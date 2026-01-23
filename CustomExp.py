@@ -1,5 +1,4 @@
-from src.experiment import Experiment
-from src.responsescreen import ResponseScreen
+from psychopy_template import Experiment, ResponseScreen
 from CustomTrialSeq import TrialSequence
 from psychopy import data
 import socket

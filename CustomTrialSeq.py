@@ -1,11 +1,12 @@
-from src.trialgroup import TrialGroup
-from src.blockbreak import BlockBreak
-from src.fixation import Fixation
-from src.intro import Intro
-from src.outro import Outro
-from src.responsescreen import ResponseScreen
-from src.trialbreak import TrialBreak
-from src.ratingscreen import RatingScreen
+from psychopy_template import (
+    TrialGroup,
+    BlockBreak,
+    Fixation,
+    Intro,
+    Outro,
+    TrialBreak,
+    RatingScreen,
+)
 
 # from itertools import chain
 import copy

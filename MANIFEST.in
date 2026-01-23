@@ -1,0 +1,14 @@
+include README.md
+include LICENSE
+include pyproject.toml
+
+# Include package data
+recursive-include psychopy_template *.py
+recursive-include psychopy_template *.ini
+
+# Exclude unnecessary files
+global-exclude __pycache__
+global-exclude *.py[cod]
+global-exclude .DS_Store
+recursive-exclude backup *
+recursive-exclude data *
