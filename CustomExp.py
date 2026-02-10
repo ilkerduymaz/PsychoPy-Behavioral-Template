@@ -1,5 +1,5 @@
 from psychopy_template import Experiment, ResponseScreen
-from CustomTrialSeq import TrialSequence
+from TempOrderTrialSeq import TrialSequence
 from psychopy import data
 import socket
 import os

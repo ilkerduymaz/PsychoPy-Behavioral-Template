@@ -409,7 +409,12 @@ class Experiment:
             self.savefilename = os.path.join(
                 self.incomplete_dir, f"_incomplete_{self.savefilename}"
             )
-        self.expData.saveAsWideText(self.savefilename + ".csv", delim="auto")
+            return
+
+        self.expData.saveAsWideText(
+            os.path.join(self.data_dir, self.savefilename + ".csv"),
+            delim="auto"
+            )
 
     def writeData(self, trials):
         trials.addData("BlockN", self.current_block)
