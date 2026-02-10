@@ -14,7 +14,13 @@ class Fixation(Trial):
 
     def initStim(self, win):
         self.cross = visual.TextStim(
-            win, text="+", color="red", colorSpace="rgb", pos=(0, 0)
+            win,
+            text="+",
+            color="red",
+            colorSpace="rgb",
+            pos=(0, 0),
+            height=1,
+            units="deg",
         )
 
         self.stim.append(self.cross)
@@ -27,6 +33,6 @@ class Fixation(Trial):
                 self.cross.color = "red"
             else:
                 self.cross.color = exp.text_color
-        
-        if frame == self.total_frames -1:
+
+        if frame == self.total_frames - 1:
             exp.last_resp_accuracy = None

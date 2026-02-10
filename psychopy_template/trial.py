@@ -46,6 +46,7 @@ class Trial:
         if frame == 0:
             trials.addData(f'TrialStart-{self.trl_type}', exp.clock.getTime())
             trials.addData(f"TrialEnd-{self.trl_type}", "")
+            self.reset()
 
         if self.stim:
             for stim in self.stim:
