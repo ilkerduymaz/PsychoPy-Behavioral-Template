@@ -406,13 +406,14 @@ class Experiment:
 
         # Save actual data
         if not self.trialhandler.finished:
-            self.savefilename = os.path.join(
-                self.incomplete_dir, f"_incomplete_{self.savefilename}"
+            savepath = os.path.join(
+                self.incomplete_dir, f"_incomplete_{self.savefilename}.csv"
             )
-            return
+        else:
+            savepath = os.path.join(self.data_dir, f"{self.savefilename}.csv")
 
         self.expData.saveAsWideText(
-            os.path.join(self.data_dir, self.savefilename + ".csv"),
+            savepath,
             delim="auto"
             )
 
