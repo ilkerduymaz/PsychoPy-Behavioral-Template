@@ -8,7 +8,7 @@ class ResponseScreen(Trial):
         super().__init__(exp, win)
         self.trl_type = "ResponseScreen"
         self.text_color = exp.text_color
-        self.duration = 3600  # in seconds
+        self.duration = -1  # in seconds
         self.total_frames = int(exp.refresh_rate * self.duration)
 
         # A dict of possible answers and their corresponding keys
@@ -37,7 +37,6 @@ class ResponseScreen(Trial):
 
     def reset(self):
         super().reset()
-        self.correct_answer = None
         self.accuracy = None
         self.answer = None
         self.pressedkey = None
@@ -58,11 +57,8 @@ class ResponseScreen(Trial):
 
                 if self.answer == self.correct_answer:
                     self.accuracy = 1
-                    exp.total_correct += 1
                 else:
                     self.accuracy = 0
-
-                exp.last_resp_accuracy = self.accuracy
 
     def writeData(self, exp, trials):
         super().writeData(exp, trials)
