@@ -41,12 +41,12 @@ class Trial:
         self.skip = False
 
     def draw(self, exp, win, frame=0, keys=[], trials=None, **kwargs):
-        self.updateStim(exp, win, frame=frame)
-
         if frame == 0:
             trials.addData(f'TrialStart-{self.trl_type}', exp.clock.getTime())
             trials.addData(f"TrialEnd-{self.trl_type}", "")
             self.reset()
+
+        self.updateStim(exp, win, frame=frame)
 
         if self.stim:
             for stim in self.stim:
