@@ -16,7 +16,7 @@ class Fixation(Trial):
         self.cross = visual.TextStim(
             win,
             text="+",
-            color="red",
+            color="magenta",
             colorSpace="rgb",
             pos=(0, 0),
             height=1,

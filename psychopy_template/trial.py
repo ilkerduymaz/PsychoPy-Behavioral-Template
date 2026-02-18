@@ -52,6 +52,22 @@ class Trial:
             for stim in self.stim:
                 stim.draw()
 
+    def handleEEGTriggers(self, exp, win, frame=0):
+        if not hasattr(exp, 'eeg'):
+            return
+
+        if not hasattr(exp, 'send_triggers'):
+            return
+
+        if not hasattr(self, 'trigger'):
+            return
+
+        if frame == 0:
+            exp.eeg.sendTrigger(win, self.trigger)
+
+        if self.skip:
+            exp.eeg.sendTrigger(win, 0)
+
     def drawTrial(self, exp, win, frame=0, keys=[], trials=None, **kwargs):
         self.draw(exp, win, frame=frame, keys=keys, trials=trials, **kwargs)
         self.handleInputs(exp, win, frame=frame, keys=keys)
@@ -59,3 +75,5 @@ class Trial:
         if frame == self.total_frames-1 or self.skip:
             self.writeData(exp, trials)
             self.skip = True
+
+        self.handleEEGTriggers(exp, win, frame=frame)

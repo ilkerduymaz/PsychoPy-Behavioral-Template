@@ -19,6 +19,7 @@ from .ratingscreen import RatingScreen
 from .feedback import Feedback
 from .sampletrial import SampleTrial
 from .monitortools import MonitorTools
+from .eeg import EEG
 
 # Define public API
 __all__ = [
@@ -36,4 +37,5 @@ __all__ = [
     "Feedback",
     "SampleTrial",
     "MonitorTools",
+    "EEG",
 ]
